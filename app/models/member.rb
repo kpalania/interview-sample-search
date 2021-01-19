@@ -1,5 +1,6 @@
 class Member < ApplicationRecord
   validates_uniqueness_of :name
+  scope :by_name, ->(member_name) { find_by_name(member_name.downcase) }
   serialize :headers, Array
 
   class << self
@@ -25,6 +26,44 @@ class Member < ApplicationRecord
       h2 = doc.search('h2').map(&:text)
       h3 = doc.search('h3').map(&:text)
       [h1, h2, h3].flatten.uniq
+    end
+
+    #
+    # @param [Object] token
+    # @param [Object] member_name
+    #
+    def find_experts token:, member_name:
+      #
+      #
+      #
+      def all_experts experts:, token:
+        experts = []
+        Member.all.select do |x|
+          experts << {
+            member_name: x.name, header: x.headers.grep(/#{token}/).uniq
+          }
+        end
+        experts
+      end
+
+      #
+      #
+      #
+      def qualified_experts
+        qualified_experts = []
+        experts.each do |expert|
+          unless expert[:header].empty?
+            _expert = Member.by_name expert[:member_name]
+            next if FriendMember.existing_friends?(member_id: @member.id, friend_id: _expert.id)
+            qualified_experts << expert
+          end
+        end
+        qualified_experts
+      end
+
+      all_experts experts: experts, token: token
+      @member = Member.by_name member_name
+      qualified_experts
     end
   end
 

@@ -35,7 +35,7 @@ class FriendMember < ApplicationRecord
     # @param [Object] friend_id
     #
     def fetch_friends member_id:
-      friends(member_id)
+      friends member_id
     end
   end
 end

@@ -5,7 +5,7 @@ class MembersController < ApplicationController
   #
   #
   def index
-    render json: nil
+    render json: Member.all
   end
 
   #
@@ -35,6 +35,13 @@ class MembersController < ApplicationController
     member_name, friend_name = params[:member_name], member_params[:friend_name]
     @member = Member.find_by_name(member_name.downcase)
     @member.add_friend friend_name: friend_name
+  end
+
+  #
+  #
+  #
+  def find_experts
+    Member.find_experts token: params[:search_token], member_name: params[:member_name]
   end
 
   #
