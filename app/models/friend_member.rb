@@ -4,7 +4,7 @@ class FriendMember < ApplicationRecord
   scope :friend, ->(friend_id) { where friend_id: friend_id }
   scope :member, ->(friend_id) { where member_id: friend_id }
 
-  scope :friend_or_member, ->(friend_id) { friend(friend_id).or(member(friend_id)) }
+  scope :friends, ->(friend_id) { friend(friend_id).or(member(friend_id)) }
 
   class << self
     #
@@ -28,6 +28,14 @@ class FriendMember < ApplicationRecord
     def existing_friends? member_id:, friend_id:
       FriendMember.where(member_id: member_id, friend_id: friend_id).
         or(FriendMember.where(member_id: friend_id, friend_id: member_id)).length > 0
+    end
+
+    #
+    # @param [Object] member_id
+    # @param [Object] friend_id
+    #
+    def fetch_friends member_id:
+      friends(member_id)
     end
   end
 end

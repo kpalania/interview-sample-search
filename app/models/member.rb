@@ -41,6 +41,11 @@ class Member < ApplicationRecord
   #
   #
   def friends
-    FriendMember.friends
+    friends = FriendMember.fetch_friends member_id: self.id
+    just_friends = ((friends.map(&:friend_id) + friends.map(&:member_id)) - [self.id]).uniq
+    {
+      friends_count: friends.count,
+      friends_websites: Member.where(id: [just_friends]).map(&:website)
+    }
   end
 end

@@ -12,7 +12,8 @@ class MembersController < ApplicationController
   #
   #
   def member_by_name
-    render json: Member.find_by_name(params[:member_name]).attributes.merge(friend: 0)
+    @member = Member.find_by_name params[:member_name]
+    render json: @member.attributes.merge(@member.friends)
   end
 
   #
