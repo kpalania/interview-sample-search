@@ -41,7 +41,7 @@ class MembersController < ApplicationController
   #
   #
   def find_experts
-    Member.find_experts token: params[:search_token], member_name: params[:member_name]
+    render json: Member.find_experts(token: params[:search_token], member_name: params[:member_name])
   end
 
   #
